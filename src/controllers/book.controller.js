@@ -29,7 +29,7 @@ const createBook = async (req, res, next) => {
 
     const newBook = await Book.create({
       title: req.body.title || "Untitled",
-      author: "6a72e1e9d9e6b8bbe4920cda",
+      author: req.user,
       genre: req.body.genre || "Unknown",
       coverImage: uploadImage.secure_url || uploadImage.url,
       file: uploadFile.secure_url || uploadFile.url,
