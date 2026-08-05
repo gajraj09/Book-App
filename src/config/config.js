@@ -1,5 +1,4 @@
 import { config as conf } from "dotenv";
-import cloudinary from "./cloudinary_configs";
 conf();
 
 const _config = {
@@ -8,9 +7,9 @@ const _config = {
   mongodb_name: process.env.MONGODB_NAME,
   env: process.env.NODE_ENV,
   jwt_secret: process.env.JWT_SECRET,
-  cloudinary_cloud_name = process.env.CLOUDINARY_CLOUD_NAME,
-  cloudinary_api_key = process.env.CLOUDINARY_API_KEY,
-  cloudinary_secret = process.env.CLOUDINARY_SECRET,
+  cloudinary_cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  cloudinary_api_key: process.env.CLOUDINARY_API_KEY,
+  cloudinary_secret: process.env.CLOUDINARY_SECRET,
 };
 
 export const config = Object.freeze(_config);
