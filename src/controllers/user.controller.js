@@ -39,4 +39,27 @@ const createUser = async (req, res, next) => {
   }
 };
 
-export { createUser };
+
+const loginUser = async(req,res,next)=>{
+    const {email,password} = req.body;
+    try {
+        if(!email||!password){
+            return next(createHttpError(400,"Please enter valid credentials.!"))
+        }
+        const getuser = await User.findOne({email});
+        if(!getuser){
+                return next(createHttpError(400, "User not exits."))
+            }
+        const isMatch = await bcrypt.compare(password,getuser.password);
+        if(!isMatch){
+            return next(createHttpError(400,"Please enter valid credentials."))
+        }
+        const token = sign({sub:getuser._id},config.jwt_secret,{expiresIn:"7d",algorithm:"HS256"})
+
+        res.json({accessToken:token});
+    } catch (error) {
+        return next(createHttpError(500,"Error in validating user."))
+    }
+}
+
+export { createUser, loginUser };
