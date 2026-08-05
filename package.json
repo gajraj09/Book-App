@@ -1,0 +1,14 @@
+{
+  "name": "book-app",
+  "version": "1.0.0",
+  "description": "Creating Book App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gajraj <gsr939988@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
