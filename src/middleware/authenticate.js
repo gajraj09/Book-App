@@ -9,7 +9,7 @@ const authenticateToken = (req, res, next) => {
     return next(createHttpError(401, "Authorization token is required"));
   }
 
-  const parsedToken = authHeader.split(" ")[2];
+  const parsedToken = authHeader.split(" ")[1];
 
   
 
@@ -18,6 +18,7 @@ const authenticateToken = (req, res, next) => {
     req.user = decoded.sub;
     // console.log(decoded)
     return next();
+    // res.json({ message: "Token is valid", user: req.user });
   } catch (error) {
     return next(createHttpError(401, "Invalid or expired token"));
   }
