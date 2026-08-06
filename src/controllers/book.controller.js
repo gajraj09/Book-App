@@ -114,4 +114,28 @@ const updateBook = async (req, res, next) => {
   }
 };
 
-export { createBook, updateBook };
+const fetchBook = async(req,res,next)=>{
+  const bookId = req.params.bookId;
+  try {
+    const getBook = await Book.findById(bookId);
+    if(!getBook){
+      return next(createHttpError(404,"Book doesnt exist in database."))
+    }
+    res.status(200).json(getBook);
+  } catch (error) {
+    return next(createHttpError(500,"Failed to get book", error.message))
+  }
+}
+const fetchAllBooks = async(req,res,next)=>{
+  try {
+    const getBook = await Book.find();
+    if(!getBook){
+      return next(createHttpError(404,"Books doesnt available in database."))
+    }
+    res.status(200).json(getBook);
+  } catch (error) {
+    return next(createHttpError(500,"Failed to get book", error.message))
+  }
+}
+
+export { createBook, updateBook,fetchBook ,fetchAllBooks};
