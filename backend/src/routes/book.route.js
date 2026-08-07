@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import express from "express";
-import { createBook, fetchAllBooks, fetchBook, updateBook } from "../controllers/book.controller.js";
+import { createBook, deleteBook, fetchAllBooks, fetchBook, updateBook } from "../controllers/book.controller.js";
 import multer from "multer";
 import authenticateToken from "../middleware/authenticate.js";
 const bookRouter = express();
@@ -33,7 +33,11 @@ bookRouter.patch(
   ]),
   updateBook,
 );
-
+bookRouter.delete(
+  "/:bookId",
+  authenticateToken,
+  deleteBook,
+);
 bookRouter.get(
   "/:bookId",
   fetchBook,
