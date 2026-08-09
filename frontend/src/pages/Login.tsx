@@ -3,22 +3,46 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
 import { Input } from "@base-ui/react/input"
-import { useState } from "react"
+import {  useEffect, useState } from "react"
 import {config} from "../config/config"
 import axios from "axios"
 
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const Login = ({
   className,
   ...props
 }: React.ComponentProps<"div">) => {
+  const navigate = useNavigate();
+const [user , setUser] = useState(null);
+
   const [formData , setFormData] = useState({
     email:"",
     password:"",
   })
+  useEffect(() =>{
+    const accessToken = localStorage.getItem("accessToken");
+    if(!accessToken) return;
+    const getAccess = async()=>{
+      try {
+        await axios.get(`${config.backend_url}/api/user/auth`,{
+          headers:{
+            Authorization:`Bearer ${accessToken}`,
+          }
+        })
+        navigate("/homepage");
+      } catch (error) {
+        localStorage.removeItem("accessToken");
+        navigate("/login")
+        return console.error(error);
+      }
+    }
+    getAccess();
+  })
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
@@ -30,9 +54,10 @@ const Login = ({
     // Handle form submission logic here
     try {
       
-      const response = await axios.post(`${config.backend_url}/login`,formData)
+      const response = await axios.post(`${config.backend_url}/api/user/login`,formData)
       if(!response) return
-      console.log(response);
+      const accessToken = response.data.accessToken;
+      localStorage.setItem("accessToken",accessToken);
     } catch (error) {
       console.log("Login Error:",error)
     }

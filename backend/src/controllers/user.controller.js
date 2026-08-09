@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import pkg from "jsonwebtoken";
+const { verify } = pkg;
 
 import { config } from "../config/config.js";
 const { sign } = pkg;
@@ -62,4 +63,19 @@ const loginUser = async(req,res,next)=>{
     }
 }
 
-export { createUser, loginUser };
+
+const userAuth = async(req,res,next)=>{
+  const accessToken = req.header("Authorization")||req.header("authorization");
+  if(!accessToken) next(createHttpError(401,"Access token is required to auth the user."))
+  try {
+    const parsedToken = accessToken.split(" ")[1];
+    const access = verify(parsedToken,config.jwt_secret);
+    console.log(access);
+    res.statusCode(200);
+
+  } catch (error) {
+    return next(createHttpError(501, "Please enter vailed acces token:",error))
+  }
+}
+
+export { createUser, loginUser,userAuth };
