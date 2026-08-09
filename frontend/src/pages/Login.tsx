@@ -17,19 +17,20 @@ const Login = ({
 const [user , setUser] = useState(null);
 
   const [formData , setFormData] = useState({
-    email:"",
-    password:"",
+    email:"abc@gmail.com",
+    password:"secret",
   })
   useEffect(() =>{
     const accessToken = localStorage.getItem("accessToken");
     if(!accessToken) return;
     const getAccess = async()=>{
       try {
-        await axios.get(`${config.backend_url}/api/user/auth`,{
+        const response = await axios.get(`${config.backend_url}/api/user/auth`,{
           headers:{
             Authorization:`Bearer ${accessToken}`,
           }
         })
+        console.log(response);
         navigate("/homepage");
       } catch (error) {
         localStorage.removeItem("accessToken");
