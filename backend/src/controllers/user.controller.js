@@ -71,7 +71,7 @@ const userAuth = async(req,res,next)=>{
     const parsedToken = accessToken.split(" ")[1];
     const access = verify(parsedToken,config.jwt_secret);
     console.log(access);
-    res.status(200);
+    res.status(200).json({message:"User is authenticated",user:access.sub});
 
   } catch (error) {
     return next(createHttpError(501, "Please enter vailed acces token:",error))
