@@ -3,6 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
 import { Input } from "@base-ui/react/input"
+import { useState } from "react"
+import {config} from "../config/config"
+import axios from "axios"
 
 import { Link } from "react-router-dom"
 
@@ -10,6 +13,34 @@ const Login = ({
   className,
   ...props
 }: React.ComponentProps<"div">) => {
+  const [formData , setFormData] = useState({
+    email:"",
+    password:"",
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    try {
+      
+      const response = await axios.post(`${config.backend_url}/login`,formData)
+      if(!response) return
+      console.log(response);
+    } catch (error) {
+      console.log("Login Error:",error)
+    }
+    
+
+
+    console.log(formData);
+  }
 
   
 
@@ -27,15 +58,18 @@ const Login = ({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit ={handleSubmit}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                 className={"border-2 rounded border-grey-900 p-1"}
+                
                   id="email"
                   type="email"
+                  value={formData.email}
                   placeholder="m@example.com"
+                  onChange={handleChange}
                   required
                 />
               </Field>
@@ -49,7 +83,7 @@ const Login = ({
                     Forgot your password?
                   </a>
                 </div>
-                <Input className={"border-2 rounded border-grey-900 p-1"} id="password" type="password" required />
+                <Input className={"border-2 rounded border-grey-900 p-1"} id="password" type="password" value={formData.password} onChange={handleChange} required />
               </Field>
               <Field>
                 <Button  type="submit">Login</Button>
