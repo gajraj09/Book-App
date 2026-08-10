@@ -14,9 +14,8 @@ import {
 } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { Input } from "@base-ui/react/input";
-import { useEffect, useState } from "react";
-import { config } from "../config/config";
-import axios from "axios";
+import { useState } from "react";
+
 import { useMutation } from "@tanstack/react-query";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -25,7 +24,6 @@ import { LoaderCircle } from "lucide-react";
 
 const Login = ({ className, ...props }: React.ComponentProps<"div">) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
 
   const mutation = useMutation({
     mutationFn: login,
@@ -43,28 +41,6 @@ const Login = ({ className, ...props }: React.ComponentProps<"div">) => {
     password: "secret",
   });
 
-  // useEffect(() =>{
-  //   const accessToken = localStorage.getItem("accessToken");
-  //   if(!accessToken) return;
-
-  //   const getAccess = async()=>{
-  //     try {
-  //       const response = await axios.get(`${config.backend_url}/api/user/auth`,{
-  //         headers:{
-  //           Authorization:`Bearer ${accessToken}`,
-  //         }
-  //       })
-  //       console.log(response);
-  //       navigate("/homepage");
-  //     } catch (error) {
-  //       localStorage.removeItem("accessToken");
-  //       navigate("/login")
-  //       console.error(error);
-  //     }
-  //   }
-  //   getAccess();
-  // }, [navigate])
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -74,7 +50,6 @@ const Login = ({ className, ...props }: React.ComponentProps<"div">) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission logic here
 
     mutation.mutate(formData);
 
@@ -88,6 +63,7 @@ const Login = ({ className, ...props }: React.ComponentProps<"div">) => {
           <Card className="border-1 border-grey-900">
             <CardHeader>
               <CardTitle>Login to your account</CardTitle>
+              {mutation.isError&&<span className="text-red-500">{"Something went wrong!"}</span>}
               <CardDescription>
                 Enter your email below to login to your account
               </CardDescription>
