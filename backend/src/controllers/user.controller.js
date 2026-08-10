@@ -64,18 +64,19 @@ const loginUser = async(req,res,next)=>{
 }
 
 
-const userAuth = async(req,res,next)=>{
-  const accessToken = req.header("Authorization")||req.header("authorization");
-  if(!accessToken) next(createHttpError(401,"Access token is required to auth the user."))
+const userAuth = async (req, res, next) => {
+  const accessToken = req.header("Authorization") || req.header("authorization");
+  if (!accessToken) return next(createHttpError(401, "Access token is required to auth the user."));
+
   try {
     const parsedToken = accessToken.split(" ")[1];
-    const access = verify(parsedToken,config.jwt_secret);
-    console.log(access);
-    res.status(200).json({message:"User is authenticated",user:access.sub});
+    if (!parsedToken) return next(createHttpError(401, "Authorization token is malformed."));
 
+    const access = verify(parsedToken, config.jwt_secret);
+    return res.status(200).json({ message: "User is authenticated", user: access.sub });
   } catch (error) {
-    return next(createHttpError(501, "Please enter vailed acces token:",error))
+    return next(createHttpError(401, "Invalid or expired access token."));
   }
 }
 
-export { createUser, loginUser,userAuth };
+export { createUser, loginUser, userAuth };
