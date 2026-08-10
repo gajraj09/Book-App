@@ -1,7 +1,33 @@
 import { useState } from "react";
-import { Search, BookOpen, Star, Clock, Heart, Grid3X3, List, ChevronDown, Bookmark } from "lucide-react";
+import {
+  Search,
+  BookOpen,
+  Heart,
+  Grid3X3,
+  List,
+  ChevronDown,
+  Bookmark,
+} from "lucide-react";
+import { User, Settings, LogOut, UserCircle } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const GENRES = ["All", "Fiction", "Sci-Fi", "Fantasy", "Mystery", "Non-Fiction", "Historical", "Memoir"];
+const GENRES = [
+  "All",
+  "Fiction",
+  "Sci-Fi",
+  "Fantasy",
+  "Mystery",
+  "Non-Fiction",
+  "Historical",
+  "Memoir",
+];
 
 const BOOKS = [
   {
@@ -14,8 +40,10 @@ const BOOKS = [
     year: 2020,
     status: "Read",
     favorite: true,
-    cover: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=560&fit=crop&auto=format",
-    description: "Between life and death there is a library, and within that library, the shelves go on forever.",
+    cover:
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=560&fit=crop&auto=format",
+    description:
+      "Between life and death there is a library, and within that library, the shelves go on forever.",
   },
   {
     id: 2,
@@ -27,8 +55,10 @@ const BOOKS = [
     year: 1965,
     status: "Reading",
     favorite: true,
-    cover: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=560&fit=crop&auto=format",
-    description: "A mythic and emotionally charged hero's journey set on the desert planet Arrakis.",
+    cover:
+      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=560&fit=crop&auto=format",
+    description:
+      "A mythic and emotionally charged hero's journey set on the desert planet Arrakis.",
   },
   {
     id: 3,
@@ -40,8 +70,10 @@ const BOOKS = [
     year: 2020,
     status: "Read",
     favorite: false,
-    cover: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=560&fit=crop&auto=format",
-    description: "Piranesi's house is no ordinary building. Its rooms are infinite, its halls stalked by tides.",
+    cover:
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=560&fit=crop&auto=format",
+    description:
+      "Piranesi's house is no ordinary building. Its rooms are infinite, its halls stalked by tides.",
   },
   {
     id: 4,
@@ -53,8 +85,10 @@ const BOOKS = [
     year: 1980,
     status: "Unread",
     favorite: false,
-    cover: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=560&fit=crop&auto=format",
-    description: "A medieval murder mystery set in an Italian monastery in the 14th century.",
+    cover:
+      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=560&fit=crop&auto=format",
+    description:
+      "A medieval murder mystery set in an Italian monastery in the 14th century.",
   },
   {
     id: 5,
@@ -66,8 +100,10 @@ const BOOKS = [
     year: 2011,
     status: "Read",
     favorite: true,
-    cover: "https://images.unsplash.com/photo-1446776858070-70c3d5ed6758?w=400&h=560&fit=crop&auto=format",
-    description: "A brief history of humankind, tracing the ways in which biology and history have defined us.",
+    cover:
+      "https://images.unsplash.com/photo-1446776858070-70c3d5ed6758?w=400&h=560&fit=crop&auto=format",
+    description:
+      "A brief history of humankind, tracing the ways in which biology and history have defined us.",
   },
   {
     id: 6,
@@ -79,8 +115,10 @@ const BOOKS = [
     year: 2017,
     status: "Reading",
     favorite: false,
-    cover: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=560&fit=crop&auto=format",
-    description: "An epic saga of a Korean family across generations in colonial Korea and Japan.",
+    cover:
+      "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=560&fit=crop&auto=format",
+    description:
+      "An epic saga of a Korean family across generations in colonial Korea and Japan.",
   },
   {
     id: 7,
@@ -92,8 +130,10 @@ const BOOKS = [
     year: 2018,
     status: "Read",
     favorite: true,
-    cover: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=560&fit=crop&auto=format",
-    description: "A memoir about a young girl who, kept out of school, leaves her survivalist family and goes on to earn a PhD.",
+    cover:
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=560&fit=crop&auto=format",
+    description:
+      "A memoir about a young girl who, kept out of school, leaves her survivalist family and goes on to earn a PhD.",
   },
   {
     id: 8,
@@ -105,8 +145,10 @@ const BOOKS = [
     year: 1951,
     status: "Unread",
     favorite: false,
-    cover: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=400&h=560&fit=crop&auto=format",
-    description: "The story of a group of scientists who preserve knowledge as civilizations fall.",
+    cover:
+      "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=400&h=560&fit=crop&auto=format",
+    description:
+      "The story of a group of scientists who preserve knowledge as civilizations fall.",
   },
   {
     id: 9,
@@ -118,8 +160,10 @@ const BOOKS = [
     year: 2001,
     status: "Read",
     favorite: true,
-    cover: "https://images.unsplash.com/photo-1510906594845-bc082582c8cc?w=400&h=560&fit=crop&auto=format",
-    description: "A young boy discovers a mysterious novel in post-war Barcelona, setting off a dark chain of events.",
+    cover:
+      "https://images.unsplash.com/photo-1510906594845-bc082582c8cc?w=400&h=560&fit=crop&auto=format",
+    description:
+      "A young boy discovers a mysterious novel in post-war Barcelona, setting off a dark chain of events.",
   },
   {
     id: 10,
@@ -131,8 +175,10 @@ const BOOKS = [
     year: 2018,
     status: "Reading",
     favorite: false,
-    cover: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=560&fit=crop&auto=format",
-    description: "The story of the witch Circe, daughter of the sun god Helios, discovering her power.",
+    cover:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=560&fit=crop&auto=format",
+    description:
+      "The story of the witch Circe, daughter of the sun god Helios, discovering her power.",
   },
   {
     id: 11,
@@ -144,8 +190,10 @@ const BOOKS = [
     year: 2018,
     status: "Read",
     favorite: false,
-    cover: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=400&h=560&fit=crop&auto=format",
-    description: "Connell and Marianne grow up in the same small town, but the similarities end there.",
+    cover:
+      "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=400&h=560&fit=crop&auto=format",
+    description:
+      "Connell and Marianne grow up in the same small town, but the similarities end there.",
   },
   {
     id: 12,
@@ -157,20 +205,26 @@ const BOOKS = [
     year: 2006,
     status: "Unread",
     favorite: false,
-    cover: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&h=560&fit=crop&auto=format",
-    description: "A father and son walk alone through burned America. Nothing moves in the ravaged landscape.",
+    cover:
+      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&h=560&fit=crop&auto=format",
+    description:
+      "A father and son walk alone through burned America. Nothing moves in the ravaged landscape.",
   },
 ];
 
-const STATUS_COLORS: Record<string, string> = {
-  Read: "bg-emerald-900/60 text-emerald-300 border border-emerald-700/40",
-  Reading: "bg-amber-900/60 text-amber-300 border border-amber-700/40",
-  Unread: "bg-zinc-800/60 text-zinc-400 border border-zinc-700/40",
-};
+// const STATUS_COLORS: Record<string, string> = {
+//   Read: "bg-emerald-900/60 text-emerald-300 border border-emerald-700/40",
+//   Reading: "bg-amber-900/60 text-amber-300 border border-amber-700/40",
+//   Unread: "bg-zinc-800/60 text-zinc-400 border border-zinc-700/40",
+// };
 
-
-
-function BookCard({ book, view }: { book: (typeof BOOKS)[0]; view: "grid" | "list" }) {
+function BookCard({
+  book,
+  view,
+}: {
+  book: (typeof BOOKS)[0];
+  view: "grid" | "list";
+}) {
   const [favorited, setFavorited] = useState(book.favorite);
   const [hovered, setHovered] = useState(false);
 
@@ -191,27 +245,43 @@ function BookCard({ book, view }: { book: (typeof BOOKS)[0]; view: "grid" | "lis
         <div className="flex flex-col justify-center flex-1 min-w-0 gap-1.5">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h3 className="font-semibold text-foreground text-base leading-snug truncate" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <h3
+                className="font-semibold text-foreground text-base leading-snug truncate"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
                 {book.title}
               </h3>
-              <p className="text-sm text-muted-foreground mt-0.5">{book.author}</p>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                {book.author}
+              </p>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
-              
               <button
                 onClick={() => setFavorited(!favorited)}
                 className="opacity-0 group-hover:opacity-100 transition-opacity"
               >
-                <Heart size={14} className={favorited ? "fill-amber-400 text-amber-400" : "text-zinc-600 hover:text-amber-400"} />
+                <Heart
+                  size={14}
+                  className={
+                    favorited
+                      ? "fill-amber-400 text-amber-400"
+                      : "text-zinc-600 hover:text-amber-400"
+                  }
+                />
               </button>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            
-            <span className="text-[11px] font-mono text-muted-foreground border border-[--border] px-2 py-0.5 rounded-full">{book.genre}</span>
-            <span className="text-[11px] text-muted-foreground">{book.pages} pages · {book.year}</span>
+            <span className="text-[11px] font-mono text-muted-foreground border border-[--border] px-2 py-0.5 rounded-full">
+              {book.genre}
+            </span>
+            <span className="text-[11px] text-muted-foreground">
+              {book.pages} pages · {book.year}
+            </span>
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-1 mt-0.5">{book.description}</p>
+          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-1 mt-0.5">
+            {book.description}
+          </p>
         </div>
       </div>
     );
@@ -220,7 +290,11 @@ function BookCard({ book, view }: { book: (typeof BOOKS)[0]; view: "grid" | "lis
   return (
     <div
       className="group relative flex flex-col rounded-2xl overflow-hidden border border-[--border] bg-card hover:border-amber-800/50 transition-all duration-300 cursor-pointer"
-      style={{ boxShadow: hovered ? "0 8px 40px rgba(201,149,58,0.12)" : "0 2px 12px rgba(0,0,0,0.4)" }}
+      style={{
+        boxShadow: hovered
+          ? "0 8px 40px rgba(201,149,58,0.12)"
+          : "0 2px 12px rgba(0,0,0,0.4)",
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -246,10 +320,13 @@ function BookCard({ book, view }: { book: (typeof BOOKS)[0]; view: "grid" | "lis
           className="absolute top-3 right-3 p-1.5 rounded-full bg-black/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-black/80"
           onClick={() => setFavorited(!favorited)}
         >
-          <Heart size={13} className={favorited ? "fill-amber-400 text-amber-400" : "text-white/70"} />
+          <Heart
+            size={13}
+            className={
+              favorited ? "fill-amber-400 text-amber-400" : "text-white/70"
+            }
+          />
         </button>
-
-        
       </div>
 
       {/* Info */}
@@ -261,11 +338,14 @@ function BookCard({ book, view }: { book: (typeof BOOKS)[0]; view: "grid" | "lis
           >
             {book.title}
           </h3>
-          <p className="text-xs text-muted-foreground mt-1">{book.author} · {book.year}</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            {book.author} · {book.year}
+          </p>
         </div>
 
-
-        <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">{book.description}</p>
+        <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
+          {book.description}
+        </p>
 
         <div className="flex items-center justify-between mt-1 pt-3 border-t border-[--border]">
           <span className="text-[11px] font-mono text-muted-foreground flex items-center gap-1">
@@ -296,10 +376,6 @@ export default function BookDashboard() {
     return matchGenre && matchStatus && matchSearch;
   });
 
-  const totalRead = BOOKS.filter((b) => b.status === "Read").length;
-  const totalReading = BOOKS.filter((b) => b.status === "Reading").length;
-  const totalFavorites = BOOKS.filter((b) => b.favorite).length;
-
   return (
     <div
       className="min-h-screen bg-background text-foreground"
@@ -307,7 +383,8 @@ export default function BookDashboard() {
     >
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-[--border] bg-background/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          {/* Brand */}
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center border border-amber-700/40">
               <BookOpen size={16} className="text-amber-400" />
@@ -325,31 +402,67 @@ export default function BookDashboard() {
             </div>
           </div>
 
-          {/* Search */}
-          <div className="flex-1 max-w-md relative">
-            <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search by title or author…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 text-sm rounded-xl bg-secondary border border-[--border] text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-amber-700/60 focus:ring-1 focus:ring-amber-700/30 transition-all"
-            />
-          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full sm:w-auto">
+            {/* Search */}
+            <div className="flex-1 min-w-0 max-w-full sm:max-w-md relative">
+              <Search
+                size={14}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
+              />
+              <input
+                type="text"
+                placeholder="Search by title or author…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 text-sm rounded-xl bg-secondary border border-[--border] text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-amber-700/60 focus:ring-1 focus:ring-amber-700/30 transition-all"
+              />
+            </div>
 
-          {/* Stats pills */}
-          <div className="hidden lg:flex items-center gap-3">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary border border-[--border] text-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span className="text-muted-foreground font-mono">{totalRead} read</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary border border-[--border] text-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              <span className="text-muted-foreground font-mono">{totalReading} reading</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary border border-[--border] text-xs">
-              <Heart size={11} className="text-amber-400 fill-amber-400" />
-              <span className="text-muted-foreground font-mono">{totalFavorites} saved</span>
+            {/* Profile */}
+            <div className="flex-shrink-0">
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className="flex items-center gap-2 rounded-xl p-1.5 pr-2.5 hover:bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-amber-700/40"
+                  aria-label="Open profile menu"
+                >
+                  <Avatar className="h-9 w-9 border border-amber-700/40">
+                    <AvatarImage src="/avatar.jpg" alt="Your profile" />
+                    <AvatarFallback className="bg-amber-500/15 text-amber-400">
+                      <User size={17} />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="hidden sm:block text-left">
+                    <p className="text-sm font-medium text-foreground leading-tight">
+                      John Doe
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">Member</p>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56 bg-background border-[--border]"
+                >
+                  <div className="px-3 py-2">
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">John Doe</span>
+                      <span className="text-xs text-muted-foreground font-normal">
+                        john@example.com
+                      </span>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="cursor-pointer">
+                    <UserCircle className="mr-2 h-4 w-4" /> Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <Settings className="mr-2 h-4 w-4" /> Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="cursor-pointer text-red-400 focus:text-red-400">
+                    <LogOut className="mr-2 h-4 w-4" /> Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
@@ -379,10 +492,15 @@ export default function BookDashboard() {
                 className="appearance-none pl-3 pr-7 py-2 text-xs font-mono rounded-lg bg-secondary border border-[--border] text-foreground focus:outline-none focus:border-amber-700/60 cursor-pointer"
               >
                 {["All", "Read", "Reading", "Unread"].map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
                 ))}
               </select>
-              <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+              <ChevronDown
+                size={12}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+              />
             </div>
 
             {/* View toggle */}
@@ -406,7 +524,10 @@ export default function BookDashboard() {
         {/* Genre tabs */}
         <div className="flex gap-2 flex-wrap mb-8">
           {GENRES.map((genre) => {
-            const count = genre === "All" ? BOOKS.length : BOOKS.filter((b) => b.genre === genre).length;
+            const count =
+              genre === "All"
+                ? BOOKS.length
+                : BOOKS.filter((b) => b.genre === genre).length;
             return (
               <button
                 key={genre}
@@ -424,14 +545,16 @@ export default function BookDashboard() {
           })}
         </div>
 
-  
-
         {/* Book grid / list */}
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <BookOpen size={40} className="text-muted-foreground/30 mb-4" />
-            <p className="text-muted-foreground font-mono text-sm">No books found</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">Try adjusting your filters or search query</p>
+            <p className="text-muted-foreground font-mono text-sm">
+              No books found
+            </p>
+            <p className="text-xs text-muted-foreground/60 mt-1">
+              Try adjusting your filters or search query
+            </p>
           </div>
         ) : view === "grid" ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
@@ -451,7 +574,9 @@ export default function BookDashboard() {
       {/* Footer */}
       <footer className="border-t border-[--border] mt-16 py-6">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <p className="text-xs font-mono text-muted-foreground/50">Bibliotheca · {BOOKS.length} volumes catalogued</p>
+          <p className="text-xs font-mono text-muted-foreground/50">
+            Bibliotheca · {BOOKS.length} volumes catalogued
+          </p>
           <p className="text-xs font-mono text-muted-foreground/50">2026</p>
         </div>
       </footer>
