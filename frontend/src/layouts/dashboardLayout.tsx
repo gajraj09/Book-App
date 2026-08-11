@@ -1,9 +1,25 @@
 import { auth } from "@/api/api";
-import { useEffect } from "react";
-import {Outlet ,useNavigate} from "react-router-dom"
+import { useMutation } from "@tanstack/react-query";
+import { LoaderCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const DashboardLayout = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+ 
+
+  const mutation = useMutation({
+    mutationFn: auth,
+    onSuccess: (response) => {
+      setUser(response.data);
+    },
+    onError: (error) => {
+      localStorage.removeItem("accessToken");
+      navigate("/auth/login");
+      console.log("Token validation failed:", error);
+    },
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -11,24 +27,34 @@ const DashboardLayout = () => {
       navigate("/auth/login");
       return;
     }
+    mutation.mutate(token);
+  }, []);
+  
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken")
+    if (!token) {
+      navigate("/auth/login");
+      return;
+    }
+  }, [user]);
 
-    const validateToken = async () => {
-      try {
-        await auth(token);
-      } catch (error) {
-        localStorage.removeItem("accessToken");
-        console.log("Token validation failed:", error);
-        navigate("/auth/login");
-      }
-    };
+  if (mutation.isPending) {
+    return (
+      <div className="flex justify-center items-center">
+        <LoaderCircle size={20} className="animate-spin"/>
+      </div>
+    )
+  }
 
-    validateToken();
-  }, [navigate]);
+  if (!user) {
+    return null;
+  }
+
   return (
     <div>
-      <Outlet />
+      <Outlet context={{ user }} />
     </div>
-  )
-}
+  );
+};
 
-export default DashboardLayout
+export default DashboardLayout;

@@ -73,7 +73,10 @@ const userAuth = async (req, res, next) => {
     if (!parsedToken) return next(createHttpError(401, "Authorization token is malformed."));
 
     const access = verify(parsedToken, config.jwt_secret);
-    return res.status(200).json({ message: "User is authenticated", user: access.sub });
+    const getUser = await User.findById(access.sub);
+    const userData = {_id:access.sub , name:getUser.name , email:getUser.email}
+    if (!userData) return next(createHttpError(401, "User not found."));
+    return res.json(userData);
   } catch (error) {
     return next(createHttpError(401, "Invalid or expired access token."));
   }

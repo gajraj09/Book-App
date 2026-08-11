@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
+import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -128,7 +129,11 @@ const Register = ({ ...props }: React.ComponentProps<typeof Card>) => {
                 </Field>
                 <FieldGroup>
                   <Field>
-                    <Button type="submit">Create Account</Button>
+                    <Button disabled={mutation.isPending} type="submit">
+                      {mutation.isPending && (
+                        <LoaderCircle className="animate-spin" />
+                      )}
+                      Create Account</Button>
 
                     <FieldDescription className="px-6 text-center">
                       Already have an account?{" "}
