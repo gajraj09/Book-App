@@ -1,3 +1,4 @@
+import type { Book } from "@/Types";
 import {
   BookOpen,
   Heart,
@@ -10,19 +11,7 @@ type UserData = { _id: string; name: string; email: string };
 
 type OutletContext = { user: UserData };
 
-type Book = {
-  id: string | number;
-  _id?: string;
-  title: string;
-  author: string;
-  cover: string;
-  genre: string;
-  pages: number;
-  year: number;
-  status: string;
-  favorite: boolean;
-  description: string;
-};
+
 
  const BookCard = ({ book, view }: { book: Book; view: "grid" | "list" })=> {
   const [favorited, setFavorited] = useState(book.favorite);

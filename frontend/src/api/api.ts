@@ -13,7 +13,7 @@ export const login = async (data: { email: string; password: string }) => {
 export const register = async(data  :{ name:string, email:string, password:string })=>{
    return api.post("/api/user/register",data);
 };
-export const books = async()=>{
+export const getBooks = async()=>{
    return api.get("/api/books");
 };
 export const auth = async (token: string) => {

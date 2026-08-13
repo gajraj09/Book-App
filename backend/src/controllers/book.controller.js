@@ -28,7 +28,10 @@ const createBook = async (req, res, next) => {
 
     const newBook = await Book.create({
       title: req.body.title || "Untitled",
-      author: req.user,
+      author: {_id:req.user._id,
+        name:req.user.name
+      },
+      description:req.body.description,
       genre: req.body.genre || "Unknown",
       coverImage: uploadImage.secure_url || uploadImage.url,
       coverImagePublicId: uploadImage.public_id,
@@ -61,7 +64,7 @@ const updateBook = async (req, res, next) => {
       return next(createHttpError(404, "Book does not exist in database."));
     }
 
-    if (String(getBook.author) !== String(req.user)) {
+    if (String(getBook.author._id) !== String(req.user._id)) {
       return next(
         createHttpError(403, "You are not allowed to modify this book."),
       );
@@ -150,7 +153,7 @@ const deleteBook = async (req, res, next) => {
       return next(createHttpError(404, "Book does not exist in database."));
     }
 
-    if (String(req.user) !== String(getBook.author)) {
+    if (String(req.user._id) !== String(getBook.author._id)) {
       return next(
         createHttpError(403, "You are not allowed to delete this book."),
       );

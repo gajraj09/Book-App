@@ -7,9 +7,20 @@ const bookSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    description:{
+      type:String,
+      required:true
+    },
     author: {
-      type: mongoose.Types.ObjectId,
-      required: true,
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
+      },
+      name: {
+        type: String,
+        required: true,
+      },
     },
     coverImage: {
       type: String,

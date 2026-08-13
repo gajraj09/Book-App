@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { books as fetchBooks } from "@/api/api";
+import { books as fetchBooks, getBooks } from "@/api/api";
 import BookCard from "@/components/BookCard";
 
 type UserData = { _id: string; name: string; email: string };
@@ -52,47 +52,17 @@ type Book = {
 
 export default function BookDashboard() {
   const { user } = useOutletContext<OutletContext>();
-  const [books, setBooks] = useState<Book[]>([]);
   const [activeGenre, setActiveGenre] = useState("All");
   const [search, setSearch] = useState("");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [statusFilter, setStatusFilter] = useState("All");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadBooks = async () => {
-      try {
-        const response = await fetchBooks();
-        if (Array.isArray(response.data)) {
-          const normalized = response.data.map((item ,index) => ({
-            id: item._id ?? item.id ?? index,
-            _id: item._id,
-            title: item.title ?? "Untitled",
-            author: item.author ? String(item.author) : "Unknown",
-            cover:
-              item.coverImage ||
-              item.cover ||
-              "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&h=560&fit=crop&auto=format",
-            genre: item.genre ?? "Fiction",
-            pages: item.pages ?? 0,
-            year:
-              item.year ??
-              (item.createdAt
-                ? new Date(item.createdAt).getFullYear()
-                : new Date().getFullYear()),
-            status: item.status ?? "Unread",
-            favorite: item.favorite ?? false,
-            description: item.description ?? "",
-          }));
-          setBooks(normalized);
-        }
-      } catch (error) {
-        console.error("Failed to fetch books", error);
-      }
-    };
-
-    loadBooks();
-  }, []);
+  const { data, isLoading, isError } = useQuery({
+    queryKey:['books'],
+    queryFn: getBooks,
+    stateTime :10000
+  });
 
   const handleLogout = ()=>{
     localStorage.removeItem("accessToken");
@@ -100,7 +70,7 @@ export default function BookDashboard() {
     console.log("Logging out!..");
   }
 
-  const filtered = books.filter((b) => {
+  const filtered = data.filter((b) => {
     const matchGenre = activeGenre === "All" || b.genre === activeGenre;
     const matchStatus = statusFilter === "All" || b.status === statusFilter;
     const matchSearch =
